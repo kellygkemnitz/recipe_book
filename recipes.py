@@ -46,5 +46,15 @@ def add_recipe():
         return redirect(url_for('index'))
     return render_template('add_recipe.html')
 
+@app.route('/delete/<int:recipe_id>', methods=['POST'])
+def delete_recipe(recipe_id):
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM recipes WHERE id = %s", (recipe_id,))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return redirect(url_for('index'))
+
 if __name__ == '__main__':
     app.run(debug=True)
